@@ -4,7 +4,9 @@ const initData = require("./data.js");
 
 const Listing = require("../Models/listing.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/Wanderlust";
+require("dotenv").config({ path: "../.env" });
+// const MONGO_URL = "mongodb://127.0.0.1:27017/Wanderlust";
+const dbUrl = process.env.ATLASDB_URL;
 
 main()
     .then(() => {
@@ -15,17 +17,16 @@ main()
     });
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 }
 
 const initDB = async () => {
     await Listing.deleteMany({});
 
-    initData.data = initData.data.map((obj) => ({
-        ...obj,
-        image: obj.image.url,
-        owner: "6a91d7b85df789486465d1c8"
-    }));
+initData.data = initData.data.map((obj) => ({
+    ...obj,
+    owner: "6aaad3dd55b1930c475720a2"
+}));
 
     await Listing.insertMany(initData.data);
 
